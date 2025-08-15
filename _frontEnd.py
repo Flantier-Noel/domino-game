@@ -66,8 +66,39 @@ def let_play():
         else :
             for i in range(-N//2, N//2) : dom_pl1.append( cnv.create_domino(width/2 + i*30 + 15, height-46, game.player1[i+N//2+1]) )
 
+    global choosen
+    choosen = -1
+    def choose_pl1(event):
+        global choosen, dom_pl1
+        N = len(game.player1)
+        x, y = event.x, event.y
+        print(x, y)
+        if N%2 == 0 :
+            i = int( (x-width/2)//30 + N//2 )
+        if 0 <= i < N and y >= height-46 :
+            for j in range(len(dom_pl1)):
+                cnv_ids = dom_pl1[j]
+                for ids in cnv_ids :
+                    if i != choosen :
+                        if j == i :
+                            if choosen == -1 : cnv.move(ids, 0, -5)
+                            else :  cnv.move(ids, 0, -10)
+                        else :
+                            if choosen == -1 : cnv.move(ids, 0, 5)
+                            elif j == choosen : cnv.move(ids, 0, 10)
+            choosen = i
+        elif choosen != -1 :
+            for j in range(len(dom_pl1)):
+                cnv_ids = dom_pl1[j]
+                for ids in cnv_ids :
+                    if j == choosen : cnv.move(ids, 0, 5)
+                    else : cnv.move(ids, 0, -5)
+            choosen = -1
+
     display_pl2()
     display_pl1()
+
+    cnv.bind('<Button-1>', choose_pl1)
 
     cnv.pack()
     root.mainloop()
