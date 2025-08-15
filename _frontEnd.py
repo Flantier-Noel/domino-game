@@ -39,7 +39,7 @@ def let_play():
     rad = 10
     cnv.create_rectangleRound(rad, rad, width-rad*0.7, height-rad*0.7, rad, fill='#076e01')
 
-    game = Game()
+    game = _backEnd.Game()
 
     global dom_pl2
     dom_pl2 = []
