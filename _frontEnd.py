@@ -32,6 +32,51 @@ def create_domino(cnv, x1, y1, dom, visible=True, *arg, **kwarg):
         return ids
 tkinter.Canvas.create_domino = create_domino
 
+def display_pl1(game, cnv, dom_pl1, width, height):
+    N = len(game.player1)
+    for cnv_id_lst in dom_pl1 :
+        for cnv_id in cnv_id_lst : cnv.delete(cnv_id)
+    dom_pl1 = []
+    if N%2 == 0 :
+        for i in range(-N//2, N//2) : dom_pl1.append( cnv.create_domino(width/2 + i*30, height-46, game.player1[i+N//2]) )
+    else :
+        for i in range(-N//2, N//2) : dom_pl1.append( cnv.create_domino(width/2 + i*30 + 15, height-46, game.player1[i+N//2+1]) )
+
+
+def display_pl2(game, cnv, dom_pl2, width):
+    N = len(game.player2)
+    for cnv_id in dom_pl2 : cnv.delete(cnv_id)
+    dom_pl2 = []
+    if N%2 == 0 :
+        for i in range(-N//2, N//2) : dom_pl2.append( cnv.create_domino(width/2 + i*30, -10, None, visible=False) )
+    else :
+        for i in range(-N//2, N//2) : dom_pl2.append( cnv.create_domino(width/2 + i*30 + 15, -10, None, visible=False) )
+
+def choose_pl1(event, game, cnv, choosen, dom_pl1, width, height):
+    N = len(game.player1)
+    x, y = event.x, event.y
+    if N%2 == 0 :
+        i = int( (x-width/2)//30 + N//2 )
+    if 0 <= i < N and y >= height-46 :
+        for j in range(len(dom_pl1)):
+            cnv_ids = dom_pl1[j]
+            for ids in cnv_ids :
+                if i != choosen :
+                    if j == i :
+                        if choosen == -1 : cnv.move(ids, 0, -5)
+                        else :  cnv.move(ids, 0, -10)
+                    else :
+                        if choosen == -1 : cnv.move(ids, 0, 5)
+                        elif j == choosen : cnv.move(ids, 0, 10)
+        choosen = i
+    elif choosen != -1 :
+        for j in range(len(dom_pl1)):
+            cnv_ids = dom_pl1[j]
+            for ids in cnv_ids :
+                if j == choosen : cnv.move(ids, 0, 5)
+                else : cnv.move(ids, 0, -5)
+        choosen = -1
+
 def let_play():
     root = tkinter.Tk()
     width, height = 800, 500
@@ -41,64 +86,28 @@ def let_play():
 
     game = _backEnd.Game()
 
-    global dom_pl2
-    dom_pl2 = []
-    def display_pl2():
-        global dom_pl2
-        N = len(game.player2)
-        for cnv_id in dom_pl2 : cnv.delete(cnv_id)
-        dom_pl2 = []
-        if N%2 == 0 :
-            for i in range(-N//2, N//2) : dom_pl2.append( cnv.create_domino(width/2 + i*30, -10, None, visible=False) )
-        else :
-            for i in range(-N//2, N//2) : dom_pl2.append( cnv.create_domino(width/2 + i*30 + 15, -10, None, visible=False) )
-
     global dom_pl1
     dom_pl1 = []
-    def display_pl1():
+    def display_pl1_0():
         global dom_pl1
-        N = len(game.player1)
-        for cnv_id_lst in dom_pl1 :
-            for cnv_id in cnv_id_lst : cnv.delete(cnv_id)
-        dom_pl1 = []
-        if N%2 == 0 :
-            for i in range(-N//2, N//2) : dom_pl1.append( cnv.create_domino(width/2 + i*30, height-46, game.player1[i+N//2]) )
-        else :
-            for i in range(-N//2, N//2) : dom_pl1.append( cnv.create_domino(width/2 + i*30 + 15, height-46, game.player1[i+N//2+1]) )
+        display_pl1(game, cnv, dom_pl1, width, height)
+
+    global dom_pl2
+    dom_pl2 = []
+    def display_pl2_0():
+        global dom_pl2
+        display_pl2(game, cnv, dom_pl2, width)
 
     global choosen
     choosen = -1
-    def choose_pl1(event):
+    def choose_pl1_0(event):
         global choosen, dom_pl1
-        N = len(game.player1)
-        x, y = event.x, event.y
-        print(x, y)
-        if N%2 == 0 :
-            i = int( (x-width/2)//30 + N//2 )
-        if 0 <= i < N and y >= height-46 :
-            for j in range(len(dom_pl1)):
-                cnv_ids = dom_pl1[j]
-                for ids in cnv_ids :
-                    if i != choosen :
-                        if j == i :
-                            if choosen == -1 : cnv.move(ids, 0, -5)
-                            else :  cnv.move(ids, 0, -10)
-                        else :
-                            if choosen == -1 : cnv.move(ids, 0, 5)
-                            elif j == choosen : cnv.move(ids, 0, 10)
-            choosen = i
-        elif choosen != -1 :
-            for j in range(len(dom_pl1)):
-                cnv_ids = dom_pl1[j]
-                for ids in cnv_ids :
-                    if j == choosen : cnv.move(ids, 0, 5)
-                    else : cnv.move(ids, 0, -5)
-            choosen = -1
+        choose_pl1(event, game, cnv, choosen, dom_pl1, width, height)
 
-    display_pl2()
-    display_pl1()
+    display_pl2_0()
+    display_pl1_0()
 
-    cnv.bind('<Button-1>', choose_pl1)
+    cnv.bind('<Button-1>', choose_pl1_0)
 
     cnv.pack()
     root.mainloop()

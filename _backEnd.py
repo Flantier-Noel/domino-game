@@ -62,6 +62,12 @@ class Game():
         game_copy.current_play = self.current_play
         return game_copy
 
+    def greater_1stdom(self):
+        for i in range(6, -1, -1):
+            for j in range(i, -1, -1):
+                if Domino(i, j) in self.player1 : return 0, (i,j)
+                if Domino(i, j) in self.player2 : return 1, (i,j)
+
     def play(self, dom, relat_pos):
         if isinstance(dom, Domino.NoneDomino) : return True
         player = [self.player1, self.player2][self.current_play]
