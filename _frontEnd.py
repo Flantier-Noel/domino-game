@@ -41,6 +41,7 @@ def display_pl1(game, cnv, dom_pl1, width, height):
         for i in range(-N//2, N//2) : dom_pl1.append( cnv.create_domino(width/2 + i*30, height-46, game.player1[i+N//2]) )
     else :
         for i in range(-N//2, N//2) : dom_pl1.append( cnv.create_domino(width/2 + i*30 + 15, height-46, game.player1[i+N//2+1]) )
+    return dom_pl1
 
 
 def display_pl2(game, cnv, dom_pl2, width):
@@ -51,6 +52,7 @@ def display_pl2(game, cnv, dom_pl2, width):
         for i in range(-N//2, N//2) : dom_pl2.append( cnv.create_domino(width/2 + i*30, -10, None, visible=False) )
     else :
         for i in range(-N//2, N//2) : dom_pl2.append( cnv.create_domino(width/2 + i*30 + 15, -10, None, visible=False) )
+    return dom_pl2
 
 def choose_pl1(event, game, cnv, choosen, dom_pl1, width, height):
     N = len(game.player1)
@@ -77,32 +79,50 @@ def choose_pl1(event, game, cnv, choosen, dom_pl1, width, height):
                 else : cnv.move(ids, 0, -5)
         choosen = -1
 
-def let_play():
+    return choosen, dom_pl1
+
+def display_dom(dom, pos, orient, cnv, g_rep):
+    _, x0, y0 = g_rep[pos]
+    cnv.create_domino()
+
+def play_Dom(dom, pos, game, cnv, g_rep, height, width):
+    if len(game.played)==0 :
+        xc, yc = width/2, height/2
+        display_dom(dom, pos, 1, cnv, g_rep)
+        g_rep = [(dom.val0, xc-23, yc+12.5), (dom.val1, xc+23, yc+12.5)]
+    game.play(dom, pos)
+
+def round(Nr, sc1, sc2):
+    game = _backEnd.Game()
+    g_rep = [(), ()]
+    if Nr == 1 :
+        jid, (i, j) = game.greater_1stdom()
+        game.current_play = jid
+        play_Dom(_backEnd.Domino(i,j), 0, game, cnv, g_rep)
+
     root = tkinter.Tk()
     width, height = 800, 500
     cnv = tkinter.Canvas(root, width=width, height=height, bg = '#663d01')
     rad = 10
     cnv.create_rectangleRound(rad, rad, width-rad*0.7, height-rad*0.7, rad, fill='#076e01')
 
-    game = _backEnd.Game()
-
     global dom_pl1
     dom_pl1 = []
     def display_pl1_0():
         global dom_pl1
-        display_pl1(game, cnv, dom_pl1, width, height)
+        dom_pl1 = display_pl1(game, cnv, dom_pl1, width, height)
 
     global dom_pl2
     dom_pl2 = []
     def display_pl2_0():
         global dom_pl2
-        display_pl2(game, cnv, dom_pl2, width)
+        dom_pl2 = display_pl2(game, cnv, dom_pl2, width)
 
     global choosen
     choosen = -1
     def choose_pl1_0(event):
         global choosen, dom_pl1
-        choose_pl1(event, game, cnv, choosen, dom_pl1, width, height)
+        choosen, dom_pl1 = choose_pl1(event, game, cnv, choosen, dom_pl1, width, height)
 
     display_pl2_0()
     display_pl1_0()
