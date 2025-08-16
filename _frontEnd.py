@@ -81,6 +81,49 @@ def choose_pl1(event, game, cnv, choosen, dom_pl1, width, height):
 
     return choosen, dom_pl1
 
+def place_pl1(event, game, cnv, dom, place_id, choosen, width, height, g_rep):
+    [(xl, yl, orientl, doml), (xr, yr, orientr, domr)] = g_rep
+    x, y = event.x, event.y
+    if place_id != None : cnv.delete(place_id)
+    if choosen :
+        dposR = {'RR':(46, 0, 92, 23), 'RL':None , 'RU':(23, 23, 46, 69), 'RD':(23, 0, 46, -46), 'RB':(46, -11.5, 69, 34.5),
+                'LR':None, 'LL':(0, 0, -46, 23), 'LU':(0, 23, 23, 69), 'LD':(0, 0, 23, -46), 'LB':(0, -11.5, -23, 34.5),
+                'UR':(23, 23, 69, 46), 'UL':(0, 23, -46, 46), 'UU':(0, 46, 23, 92), 'UD':None, 'UB':(-11.5, 46, 34.5, 69),
+                'DR':(23, 0, 69, 23), 'DL':(0, 0, -46, 23), 'DU':None, 'DD':(0,0, 23, -46), 'DB':(-11.5, 0, 34.5, -23),
+                'BR':(23, 11.5, 69, 34.5), 'BL':(0, 11.5, -46, 34.5), 'BU':(11.5, 23, 34.5, 69), 'BD':(11.5, 0, 34.5, -46), 'BB':None}
+
+        dposL = {'RR':(0, 0, -46, 23), 'RL':None , 'RU':(0, 23, 23, 69), 'RD':(0, 0, 23, -46), 'RB':(-23, -11.5, 0, 34.5),
+                'LR':None, 'LL':(46, 0, 92, 23) , 'LU':(23, 23, 46, 69), 'LD':(23, 0, 46, -46), 'LB':(46, -11.5, 69, 34.5),
+                'UR':(23, 0, 69, 23), 'UL':(0, 0, -46, 23), 'UU':(0,0, 23, -46), 'UD':None, 'UB':(-11.5, 0, 34.5, -23),
+                'DR':(23, 23, 69, 46), 'DL':(0, 23, -46, 46), 'DU':None, 'DD':(0, 46, 23, 92), 'DB':(-11.5, 46, 34.5, 69),
+                'BR':(23, 11.5, 69, 34.5), 'BL':(0, 11.5, -46, 34.5), 'BU':(11.5, 23, 34.5, 69), 'BD':(11.5, 0, 34.5, -46), 'BB':None} ## B_ ?
+
+        if dom.val0 == dom.val1 :
+            if dom.val1 == domr.val1 :
+                if dposR[orientr+'B'] != None :
+                    (x1, y1, x2, y2) = dposR[orientr+'B']
+                    if x1 <= x <= x2 and y1 <= y <= y2:
+                        return cnv.create_rectangeRound(x1, y1, x2, y2, 2, outline='#f00'), (x1, y1, x2, y2), 1, 'B'
+            if dom.val0 == doml.val0 :
+                if dposL[orientl+'B' != None] :
+                    (x1, y1, x2, y2) = dposL[orientl+'B']
+                    if x1 <= x <= x2 and y1 <= y <= y2:
+                        return cnv.create_rectangeRound(x1, y1, x2, y2, 2, outline='#f00'), (x1, y1, x2, y2), 0, 'B'
+
+
+        for or2 in ['R', 'L', 'U', 'D']:
+            if dom.val0 == domr.val1 or dom.val1 == domr.val1 :
+                if dposR[orientr+or2] != None :
+                    (x1, y1, x2, y2) = dposR[orientr+or2]
+                    if x1 <= x <= x2 and y1 <= y <= y2:
+                        return cnv.create_rectangeRound(x1, y1, x2, y2, 2, outline='#f00'), (x1, y1, x2, y2), 1, or2
+            if dom.val0 == doml.val0 or dom.val1 == doml.val0 :
+                if dposL[orientl+or2] != None :
+                    (x1, y1, x2, y2) = dposL[orientr+or2]
+                    if x1 <= x <= x2 and y1 <= y <= y2 :
+                        return cnv.create_rectangeRound(x1, y1, x2, y2, 2, outline='#f00'), (x1, y1, x2, y2), 0, or2
+
+
 def display_dom(dom, pos, orient, cnv, g_rep):
     _, x0, y0 = g_rep[pos]
     cnv.create_domino()
