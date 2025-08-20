@@ -12,10 +12,14 @@ def create_rectangleRound(cnv, x1, y1, x2, y2, rad, *args, **kwargs):
     return cnv.create_polygon(pts, *args, **kwargs)
 tkinter.Canvas.create_rectangleRound = create_rectangleRound
 
-def create_domino(cnv, x1, y1, dom, visible=True, *arg, **kwarg):
+def create_domino(cnv, x1, y1, dom, visible=True, orient='vertical', switch=False, *arg, **kwarg):
     ids = []
-    ids.append( cnv.create_rectangleRound(x1, y1, x1+23, y1+46, 2, fill='#ebe3d8', outline='#000') )
-    ids.append( cnv.create_line(x1, y1+23, x1+23, y1+23, fill='#000') )
+    if orient == 'vertical' : 
+        ids.append( cnv.create_rectangleRound(x1, y1, x1+23, y1+46, 2, fill='#ebe3d8', outline="#29272e") )
+        ids.append( cnv.create_line(x1, y1+23, x1+23, y1+23, fill='#29272e') )
+    if orient == 'horizontal' :
+        ids.append( cnv.create_rectangleRound(x1, y1, x1+46, y1+23, 2, fill='#ebe3d8', outline='#29272e') )
+        ids.append( cnv.create_line(x1+23, y1, x1+23, y1+23, fill='#29272e') )
     if visible :
         dots = [[],
                 [(9, 9)],
@@ -25,10 +29,15 @@ def create_domino(cnv, x1, y1, dom, visible=True, *arg, **kwarg):
                 [(2, 2), (2, 16), (16, 2), (9, 9), (16, 16)],
                 [(2, 2), (2, 9), (2, 16), (16, 2), (16, 9), (16, 16)]]
 
-        v0 = dom.val0
-        for (dx, dy) in dots[v0]: ids.append( cnv.create_oval(x1+dx, y1+dy, x1+dx+5, y1+dy+5, fill='#000') )
-        v1 = dom.val1
-        for (dx, dy) in dots[v1]: ids.append( cnv.create_oval(x1+dx, y1+dy+23, x1+dx+5, y1+dy+5+23, fill='#000') )
+        v0, v1 = dom.val0, dom.val1
+        if switch : v0, v1 = v1, v0
+
+        for (dx, dy) in dots[v0]: ids.append( cnv.create_oval(x1+dx, y1+dy, x1+dx+5, y1+dy+5, fill='#29272e') )
+        if orient == 'vertical' : 
+            for (dx, dy) in dots[v1]: ids.append( cnv.create_oval(x1+dx, y1+dy+23, x1+dx+5, y1+dy+5+23, fill='#29272e') )
+        if orient == 'horizontal' :
+            for (dx, dy) in dots[v1]: ids.append( cnv.create_oval(x1+dx+23, y1+dy, x1+dx+5+23, y1+dy+5, fill='#29272e') ) 
+            
         return ids
 tkinter.Canvas.create_domino = create_domino
 
@@ -89,10 +98,10 @@ def place_pl1(event, game, cnv, dom, place_id, choosen, width, height, g_rep):
             xc, yc = width/2, height/2
             if dom.val0 == dom.val1 :
                 x1, y1, x2, y2 = xc-11.5, yc-23, xc+11.5, yc+23
-                return cnv.create_rectangeRound(x1, y1, x2, y2, 2, outline='#f00'), (x1, y1, x2, y2), 1, 'B'
+                return cnv.create_rectangeRound(x1, y1, x2, y2, 2, outline='#ff2b2b'), (x1, y1, x2, y2), 1, 'B'
             else :
                 x1, y1, x2, y2 = xc-23, yc-11.5, xc+23, yc+11.5
-                return cnv.create_rectangeRound(x1, y1, x2, y2, 2, outline='#f00'), (x1, y1, x2, y2), 1, 'R'
+                return cnv.create_rectangeRound(x1, y1, x2, y2, 2, outline='#ff2b2b'), (x1, y1, x2, y2), 1, 'R'
             
         [(xl, yl, orientl, doml), (xr, yr, orientr, domr)] = g_rep
         dposR = {'RR':(46, 0, 92, 23), 'RL':None , 'RU':(23, 23, 46, 69), 'RD':(23, 0, 46, -46), 'RB':(46, -11.5, 69, 34.5),
@@ -105,7 +114,7 @@ def place_pl1(event, game, cnv, dom, place_id, choosen, width, height, g_rep):
                 'LR':None, 'LL':(46, 0, 92, 23) , 'LU':(23, 23, 46, 69), 'LD':(23, 0, 46, -46), 'LB':(46, -11.5, 69, 34.5),
                 'UR':(23, 0, 69, 23), 'UL':(0, 0, -46, 23), 'UU':(0,0, 23, -46), 'UD':None, 'UB':(-11.5, 0, 34.5, -23),
                 'DR':(23, 23, 69, 46), 'DL':(0, 23, -46, 46), 'DU':None, 'DD':(0, 46, 23, 92), 'DB':(-11.5, 46, 34.5, 69),
-                'BR':(23, 11.5, 69, 34.5), 'BL':(0, 11.5, -46, 34.5), 'BU':(11.5, 23, 34.5, 69), 'BD':(11.5, 0, 34.5, -46), 'BB':None} ## B_ ?
+                'BR':(23, 11.5, 69, 34.5), 'BL':(0, 11.5, -46, 34.5), 'BU':(11.5, 23, 34.5, 69), 'BD':(11.5, 0, 34.5, -46), 'BB':None}
 
         if dom.val0 == dom.val1 :
             if dom.val1 == domr.val1 :
@@ -113,13 +122,13 @@ def place_pl1(event, game, cnv, dom, place_id, choosen, width, height, g_rep):
                     (x10, y10, x20, y20) = dposR[orientr+'B']
                     x1, y1, x2, y2 = x10+xr, y10+yr, x20+xr, y20+yr
                     if x1 <= x <= x2 and y1 <= y <= y2:
-                        return cnv.create_rectangeRound(x1, y1, x2, y2, 2, outline='#f00'), (x1, y1, x2, y2), 1, 'B'
+                        return cnv.create_rectangeRound(x1, y1, x2, y2, 2, outline='#ff2b2b'), (x1, y1, x2, y2), 1, 'B'
             if dom.val0 == doml.val0 :
                 if dposL[orientl+'B' != None] :
                     (x10, y10, x20, y20) = dposL[orientl+'B']
                     x1, y1, x2, y2 = x10+xl, y10+yl, x20+xl, y20+yl
                     if x1 <= x <= x2 and y1 <= y <= y2:
-                        return cnv.create_rectangeRound(x1, y1, x2, y2, 2, outline='#f00'), (x1, y1, x2, y2), 0, 'B'
+                        return cnv.create_rectangeRound(x1, y1, x2, y2, 2, outline='#ff2b2b'), (x1, y1, x2, y2), 0, 'B'
 
         for or2 in ['R', 'L', 'U', 'D']:
             if dom.val0 == domr.val1 or dom.val1 == domr.val1 :
@@ -127,17 +136,61 @@ def place_pl1(event, game, cnv, dom, place_id, choosen, width, height, g_rep):
                     (x10, y10, x20, y20) = dposR[orientr+or2]
                     x1, y1, x2, y2 = x10+xr, y10+yr, x20+xr, y20+yr
                     if x1 <= x <= x2 and y1 <= y <= y2:
-                        return cnv.create_rectangeRound(x1, y1, x2, y2, 2, outline='#f00'), (x1, y1, x2, y2), 1, or2
+                        return cnv.create_rectangeRound(x1, y1, x2, y2, 2, outline='#ff2b2b'), (x1, y1, x2, y2), 1, or2
             if dom.val0 == doml.val0 or dom.val1 == doml.val0 :
                 if dposL[orientl+or2] != None :
                     (x10, y10, x20, y20) = dposL[orientr+or2]
                     x1, y1, x2, y2 = x10+xl, y10+yl, x20+xl, y20+yl
                     if x1 <= x <= x2 and y1 <= y <= y2 :
-                        return cnv.create_rectangeRound(x1, y1, x2, y2, 2, outline='#f00'), (x1, y1, x2, y2), 0, or2
+                        return cnv.create_rectangeRound(x1, y1, x2, y2, 2, outline='#ff2b2b'), (x1, y1, x2, y2), 0, or2
 
-def play_Dom(dom, pos, game, cnv, g_rep, height, width):
+def play_Dom(dom, pos, orient, game, cnv, g_rep, height, width):
+    if len(game.played) == 0 :
+        xc, yc = width/2, height/2
+        if dom.val0 == dom.val1 :
+            cnv.create_domino(xc-11.5, yc-23, dom)
+            g_rep = [(xc-11.5, yc-23, dom), (xc-11.5, yc-23, dom)]
+        else :
+            cnv.create_domino(xc-23, yc-11.5, dom, orient='horizontal')
+            g_rep = [(xc-23, yc-11.5, dom), (xc-23, yc-11.5, dom)]
+        game.play(dom, pos)
+        return game, g_rep
+
+    (x0, y0, orient0, dom0) = g_rep[pos]
+
+    dposR = {'RR':(46, 0), 'RL':None , 'RU':(23, 23), 'RD':(23, -46), 'RB':(46, -11.5),
+            'LR':None, 'LL':(-46, 0), 'LU':(0, 23), 'LD':(0, -46), 'LB':(-23, -11.5),
+            'UR':(23, 23), 'UL':(-46, 23), 'UU':(0, 46), 'UD':None, 'UB':(-11.5, 46),
+            'DR':(23, 0), 'DL':(-46, 0), 'DU':None, 'DD':(0, -46), 'DB':(-11.5, -23),
+            'BR':(23, 11.5), 'BL':(-46, 11.5), 'BU':(11.5, 23), 'BD':(11.5, -46), 'BB':None}
+    
+    dposL = {'RR':(46, 0), 'RL':None , 'RU':(0, 23), 'RD':(0, -46), 'RB':(-23, -11.5),
+            'LR':None, 'LL':(46, 0) , 'LU':(23, 23), 'LD':(0, -46), 'LB':(46, -11.5),
+            'UR':(23, 0), 'UL':(-46, 0), 'UU':(0, -46), 'UD':None, 'UB':(-11.5, -23),
+            'DR':(23, 23), 'DL':(-46, 23), 'DU':None, 'DD':(0, 46), 'DB':(-11.5, 46),
+            'BR':(23, 11.5), 'BL':(-46, 11.5), 'BU':(11.5, 23), 'BD':(11.5, -46), 'BB':None}
+
+    if pos : (dx, dy) = dposL[orient0+orient]
+    else : (dx, dy) = dposR[orient0+orient]
+
+    if orient in ['R', 'L'] : orient_abs = 'horizontal'
+    if orient in ['U', 'D'] : orient_abs = 'vertical'
+    if orient == 'B' :
+        if orient0 in ['R', 'L'] : orient_abs = 'vertical'
+        if orient0 in ['U', 'D'] : orient_abs = 'horizontal'
+    
+    if pos :
+        if dom.val0 == dom0.val1 : switch = False
+        if dom.val1 == dom0.val1 : switch = True
+    else :
+        if dom.val0 == dom0.val0 : switch = True
+        if dom.val1 == dom0.val0 : switch = False
+    ids = cnv.create_domino(x0, y0, dom, orient=orient_abs, switch=switch)
+    for item in ids : cnv.move(item, dx, dy)
 
     game.play(dom, pos)
+    g_rep[pos] = (x0+dx, y0+dy, dom.copy())
+    return game, g_rep
 
 def round(Nr, sc1, sc2):
     game = _backEnd.Game()
@@ -145,7 +198,7 @@ def round(Nr, sc1, sc2):
     if Nr == 1 :
         jid, (i, j) = game.greater_1stdom()
         game.current_play = jid
-        play_Dom(_backEnd.Domino(i,j), 0, game, cnv, g_rep)
+        game, g_rep = play_Dom(_backEnd.Domino(i,j), 0, '' , game, cnv, g_rep)
 
     root = tkinter.Tk()
     width, height = 800, 500

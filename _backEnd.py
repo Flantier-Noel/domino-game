@@ -40,6 +40,9 @@ class Domino() :
 
     def __int__(self):
         return self.val0 + self.val1
+    
+    def copy(self):
+        return Domino(self.val0, self.val1)
 
 class Game():
     def __init__(self):
