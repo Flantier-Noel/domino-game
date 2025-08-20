@@ -192,19 +192,15 @@ def play_Dom(dom, pos, orient, game, cnv, g_rep, height, width):
     g_rep[pos] = (x0+dx, y0+dy, dom.copy())
     return game, g_rep
 
-def round(Nr, sc1, sc2):
+def round(cnv, Nr, sc1, sc2):
+    width, height = cnv['width'], cnv['heigth']
+
     game = _backEnd.Game()
     g_rep = [(), ()]
     if Nr == 1 :
         jid, (i, j) = game.greater_1stdom()
         game.current_play = jid
         game, g_rep = play_Dom(_backEnd.Domino(i,j), 0, '' , game, cnv, g_rep)
-
-    root = tkinter.Tk()
-    width, height = 800, 500
-    cnv = tkinter.Canvas(root, width=width, height=height, bg = '#663d01')
-    rad = 10
-    cnv.create_rectangleRound(rad, rad, width-rad*0.7, height-rad*0.7, rad, fill='#076e01')
 
     global dom_pl1
     dom_pl1 = []
@@ -228,6 +224,3 @@ def round(Nr, sc1, sc2):
     display_pl1_0()
 
     cnv.bind('<Button-1>', choose_pl1_0)
-
-    cnv.pack()
-    root.mainloop()
