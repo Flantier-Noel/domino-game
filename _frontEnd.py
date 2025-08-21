@@ -66,8 +66,9 @@ def display_pl2(game, cnv, dom_pl2, width):
 def choose_pl1(event, game, cnv, choosen, dom_pl1, width, height):
     N = len(game.player1)
     x, y = event.x, event.y
-    if N%2 == 0 :
-        i = int( (x-width/2)//30 + N//2 )
+    if N%2 == 0 : i = int( (x-width/2)//30 + N//2 )
+    else : i = int( (x-width/2 + 15)//30 + N//2 )
+    
     if 0 <= i < N and y >= height-46 :
         for j in range(len(dom_pl1)):
             cnv_ids = dom_pl1[j]
@@ -98,10 +99,10 @@ def place_pl1(event, game, cnv, dom, place_id, choosen, width, height, g_rep):
             xc, yc = width/2, height/2
             if dom.val0 == dom.val1 :
                 x1, y1, x2, y2 = xc-11.5, yc-23, xc+11.5, yc+23
-                return cnv.create_rectangeRound(x1, y1, x2, y2, 2, outline='#ff2b2b'), (x1, y1, x2, y2), 1, 'B'
+                return cnv.create_rectangleRound(x1, y1, x2, y2, 2, outline='#ff2b2b', fill=''), (x1, y1, x2, y2), 1, 'B'
             else :
                 x1, y1, x2, y2 = xc-23, yc-11.5, xc+23, yc+11.5
-                return cnv.create_rectangeRound(x1, y1, x2, y2, 2, outline='#ff2b2b'), (x1, y1, x2, y2), 1, 'R'
+                return cnv.create_rectangleRound(x1, y1, x2, y2, 2, outline='#ff2b2b', fill=''), (x1, y1, x2, y2), 1, 'R'
             
         [(xl, yl, orientl, doml), (xr, yr, orientr, domr)] = g_rep
         dposR = {'RR':(46, 0, 92, 23), 'RL':None , 'RU':(23, 23, 46, 69), 'RD':(23, 0, 46, -46), 'RB':(46, -11.5, 69, 34.5),
@@ -122,13 +123,13 @@ def place_pl1(event, game, cnv, dom, place_id, choosen, width, height, g_rep):
                     (x10, y10, x20, y20) = dposR[orientr+'B']
                     x1, y1, x2, y2 = x10+xr, y10+yr, x20+xr, y20+yr
                     if x1 <= x <= x2 and y1 <= y <= y2:
-                        return cnv.create_rectangeRound(x1, y1, x2, y2, 2, outline='#ff2b2b'), (x1, y1, x2, y2), 1, 'B'
+                        return cnv.create_rectangleRound(x1, y1, x2, y2, 2, outline='#ff2b2b', fill=''), (x1, y1, x2, y2), 1, 'B'
             if dom.val0 == doml.val0 :
                 if dposL[orientl+'B' != None] :
                     (x10, y10, x20, y20) = dposL[orientl+'B']
                     x1, y1, x2, y2 = x10+xl, y10+yl, x20+xl, y20+yl
                     if x1 <= x <= x2 and y1 <= y <= y2:
-                        return cnv.create_rectangeRound(x1, y1, x2, y2, 2, outline='#ff2b2b'), (x1, y1, x2, y2), 0, 'B'
+                        return cnv.create_rectangleRound(x1, y1, x2, y2, 2, outline='#ff2b2b', fill=''), (x1, y1, x2, y2), 0, 'B'
 
         for or2 in ['R', 'L', 'U', 'D']:
             if dom.val0 == domr.val1 or dom.val1 == domr.val1 :
@@ -136,23 +137,23 @@ def place_pl1(event, game, cnv, dom, place_id, choosen, width, height, g_rep):
                     (x10, y10, x20, y20) = dposR[orientr+or2]
                     x1, y1, x2, y2 = x10+xr, y10+yr, x20+xr, y20+yr
                     if x1 <= x <= x2 and y1 <= y <= y2:
-                        return cnv.create_rectangeRound(x1, y1, x2, y2, 2, outline='#ff2b2b'), (x1, y1, x2, y2), 1, or2
+                        return cnv.create_rectangleRound(x1, y1, x2, y2, 2, outline='#ff2b2b', fill=''), (x1, y1, x2, y2), 1, or2
             if dom.val0 == doml.val0 or dom.val1 == doml.val0 :
                 if dposL[orientl+or2] != None :
                     (x10, y10, x20, y20) = dposL[orientr+or2]
                     x1, y1, x2, y2 = x10+xl, y10+yl, x20+xl, y20+yl
                     if x1 <= x <= x2 and y1 <= y <= y2 :
-                        return cnv.create_rectangeRound(x1, y1, x2, y2, 2, outline='#ff2b2b'), (x1, y1, x2, y2), 0, or2
+                        return cnv.create_rectangleRound(x1, y1, x2, y2, 2, outline='#ff2b2b', fill=''), (x1, y1, x2, y2), 0, or2
 
 def play_Dom(dom, pos, orient, game, cnv, g_rep, height, width):
     if len(game.played) == 0 :
         xc, yc = width/2, height/2
         if dom.val0 == dom.val1 :
             cnv.create_domino(xc-11.5, yc-23, dom)
-            g_rep = [(xc-11.5, yc-23, dom), (xc-11.5, yc-23, dom)]
+            g_rep = [(xc-11.5, yc-23, 'B', dom), (xc-11.5, yc-23, 'B', dom)]
         else :
             cnv.create_domino(xc-23, yc-11.5, dom, orient='horizontal')
-            g_rep = [(xc-23, yc-11.5, dom), (xc-23, yc-11.5, dom)]
+            g_rep = [(xc-23, yc-11.5, 'R', dom), (xc-23, yc-11.5, 'R', dom)]
         game.play(dom, pos)
         return game, g_rep
 
@@ -189,18 +190,18 @@ def play_Dom(dom, pos, orient, game, cnv, g_rep, height, width):
     for item in ids : cnv.move(item, dx, dy)
 
     game.play(dom, pos)
-    g_rep[pos] = (x0+dx, y0+dy, dom.copy())
+    g_rep[pos] = (x0+dx, y0+dy, orient, dom.copy())
     return game, g_rep
 
 def round(cnv, Nr, sc1, sc2):
-    width, height = cnv['width'], cnv['heigth']
+    width, height = float(cnv['width']), float(cnv['height'])
 
     game = _backEnd.Game()
     g_rep = [(), ()]
     if Nr == 1 :
         jid, (i, j) = game.greater_1stdom()
         game.current_play = jid
-        game, g_rep = play_Dom(_backEnd.Domino(i,j), 0, '' , game, cnv, g_rep)
+        game, g_rep = play_Dom(_backEnd.Domino(i,j), 0, '' , game, cnv, g_rep, height, width)
 
     global dom_pl1
     dom_pl1 = []
