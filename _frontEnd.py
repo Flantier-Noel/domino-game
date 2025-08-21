@@ -88,7 +88,7 @@ def choose_pl1(event, game, cnv, choosen, dom_pl1, width, height):
                 else : cnv.move(ids, 0, -5)
         choosen = -1
 
-    return choosen, dom_pl1
+    return choosen, dom_pl1, game.player1[choosen]
 
 def place_pl1(event, game, cnv, dom, place_id, choosen, width, height, g_rep):
     x, y = event.x, event.y
@@ -214,13 +214,23 @@ def round(cnv, Nr, sc1, sc2):
         global dom_pl2
         dom_pl2 = display_pl2(game, cnv, dom_pl2, width)
 
-    global choosen
+    global choosen, dom_choose
     choosen = -1
+    dom_choose = None
     def choose_pl1_0(event):
-        global choosen, dom_pl1
-        choosen, dom_pl1 = choose_pl1(event, game, cnv, choosen, dom_pl1, width, height)
+        global choosen, dom_pl1, dom_choose
+        choosen, dom_pl1, dom_choose = choose_pl1(event, game, cnv, choosen, dom_pl1, width, height)
 
     display_pl2_0()
     display_pl1_0()
 
+    global id_sel, coord_sel, pos_sel, ort_sel
+    id_sel, coord_sel, pos_sel, ort_sel = None, None, None, None
+
+    def select_pl1_0(event):
+        global choosen, dom_choose, id_sel, coord_sel, pos_sel, ort_sel
+        if choosen != -1 :
+            id_sel, coord_sel, pos_sel, ort_sel = place_pl1(event, game, cnv, dom_choose, id_sel, choosen, width, height, g_rep)
+
     cnv.bind('<Button-1>', choose_pl1_0)
+    cnv.bind('<Motion>', select_pl1_0)
