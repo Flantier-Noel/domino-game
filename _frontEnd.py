@@ -122,13 +122,13 @@ def place_pl1(event, game, cnv, dom, place_id, choosen, width, height, g_rep):
                 if dposR[orientr+'B'] != None :
                     (x10, y10, x20, y20) = dposR[orientr+'B']
                     x1, y1, x2, y2 = x10+xr, y10+yr, x20+xr, y20+yr
-                    if x1 <= x <= x2 and y1 <= y <= y2:
+                    if min(x1,x2) <= x <= max(x1,x2) and min(y1,y2) <= y <= max(y1,y2):
                         return cnv.create_rectangleRound(x1, y1, x2, y2, 2, outline='#ff2b2b', fill=''), (x1, y1, x2, y2), 1, 'B'
             if dom.val0 == doml.val0 :
                 if dposL[orientl+'B' != None] :
                     (x10, y10, x20, y20) = dposL[orientl+'B']
                     x1, y1, x2, y2 = x10+xl, y10+yl, x20+xl, y20+yl
-                    if x1 <= x <= x2 and y1 <= y <= y2:
+                    if min(x1,x2) <= x <= max(x1,x2) and min(y1,y2) <= y <= max(y1,y2):
                         return cnv.create_rectangleRound(x1, y1, x2, y2, 2, outline='#ff2b2b', fill=''), (x1, y1, x2, y2), 0, 'B'
 
         for or2 in ['R', 'L', 'U', 'D']:
@@ -136,13 +136,13 @@ def place_pl1(event, game, cnv, dom, place_id, choosen, width, height, g_rep):
                 if dposR[orientr+or2] != None :
                     (x10, y10, x20, y20) = dposR[orientr+or2]
                     x1, y1, x2, y2 = x10+xr, y10+yr, x20+xr, y20+yr
-                    if x1 <= x <= x2 and y1 <= y <= y2:
+                    if min(x1,x2) <= x <= max(x1,x2) and min(y1,y2) <= y <= max(y1,y2):
                         return cnv.create_rectangleRound(x1, y1, x2, y2, 2, outline='#ff2b2b', fill=''), (x1, y1, x2, y2), 1, or2
             if dom.val0 == doml.val0 or dom.val1 == doml.val0 :
                 if dposL[orientl+or2] != None :
                     (x10, y10, x20, y20) = dposL[orientr+or2]
                     x1, y1, x2, y2 = x10+xl, y10+yl, x20+xl, y20+yl
-                    if x1 <= x <= x2 and y1 <= y <= y2 :
+                    if min(x1,x2) <= x <= max(x1,x2) and min(y1,y2) <= y <= max(y1,y2):
                         return cnv.create_rectangleRound(x1, y1, x2, y2, 2, outline='#ff2b2b', fill=''), (x1, y1, x2, y2), 0, or2
 
 def play_Dom(dom, pos, orient, game, cnv, g_rep, height, width):
