@@ -219,7 +219,13 @@ def round(cnv, Nr, sc1, sc2):
     choosen = -1
     dom_choose = None
     def choose_pl1_0(event):
-        global choosen, dom_pl1, dom_choose
+        global choosen, dom_pl1, dom_choose, game, g_rep, id_sel, coord_sel, pos_sel, ort_sel
+        if id_sel != None :
+            print(choosen, game.player1[choosen])
+            game, g_rep = play_Dom(game.player1[choosen], pos_sel, ort_sel , game, cnv, g_rep, height, width)
+            id_sel = None
+            display_pl1_0()
+
         choosen, dom_pl1, dom_choose = choose_pl1(event, game, cnv, choosen, dom_pl1, width, height)
 
     display_pl2_0()
