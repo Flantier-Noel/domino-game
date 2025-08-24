@@ -195,6 +195,7 @@ def play_Dom(dom, pos, orient, game, cnv, g_rep, height, width):
 
 def round(cnv, Nr, sc1, sc2):
     width, height = float(cnv['width']), float(cnv['height'])
+    Nlayer = 2
 
     game = _backEnd.Game()
     g_rep = [(), ()]
@@ -223,8 +224,12 @@ def round(cnv, Nr, sc1, sc2):
         if id_sel != None :
             print(choosen, game.player1[choosen])
             game, g_rep = play_Dom(game.player1[choosen], pos_sel, ort_sel , game, cnv, g_rep, height, width)
-            id_sel = None
+            id_sel = None ; choosen = -1
             display_pl1_0()
+
+            mvs = game.best_moves(Nlayer)
+            dom, pos = mvs[0][0]
+            play_Dom(dom, pos, 'R', game, cnv, g_rep, height, width) ## orient !!
 
         choosen, dom_pl1, dom_choose = choose_pl1(event, game, cnv, choosen, dom_pl1, width, height)
 

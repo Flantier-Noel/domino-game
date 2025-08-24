@@ -89,9 +89,9 @@ class Game():
         else : return False
 
     def rate(self):
-        avail_doms = sorted([int(dom) for dom in self.avail_doms.keys() if self.avail_doms[dom]])
+        avail_doms = sorted([int(dom) for dom in self.avail_doms.keys() if dom in self.avail_doms.keys() and self.avail_doms[dom]])
         p1_val_max = sum(avail_doms[:len(self.player2)])
-        p1_val_min = min([int(dom) for dom in self.avail_doms.keys() if self.avail_doms[dom]])
+        p1_val_min = sum(avail_doms[len(self.player2):])  # min([int(dom) for dom in self.avail_doms.keys() if self.avail_doms[dom]])
         p2_val = sum([int(dom) for dom in self.player2])
         return (p1_val_min + len(self.player2) + 1)/(p1_val_max + len(self.player2) + p2_val + 1)
 
@@ -139,4 +139,4 @@ class Game():
             return game_copy.rate()
     
         moves.sort(key = sort_fun)
-        return moves
+        return moves[::-1]
