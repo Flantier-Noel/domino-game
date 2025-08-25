@@ -229,7 +229,8 @@ def round(cnv, Nr, sc1, sc2):
 
             mvs = game.best_moves(Nlayer)
             dom, pos = mvs[0][0]
-            play_Dom(dom, pos, 'R', game, cnv, g_rep, height, width) ## orient !!
+            _, _, orient0, _ = g_rep[pos]
+            play_Dom(dom, pos, orient0, game, cnv, g_rep, height, width)
 
         choosen, dom_pl1, dom_choose = choose_pl1(event, game, cnv, choosen, dom_pl1, width, height)
 
