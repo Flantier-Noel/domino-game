@@ -2,7 +2,8 @@ import random
 
 class Domino() :
     class NoneDomino():
-        def __init__(self): pass
+        def __init__(self):
+            self.vzal, self.val1 = None, None
         def __hash__(self): return hash(None)
         def __repr__(self): return 'NoneDomino'
         def __eq__(self, item): return isinstance(item, Domino.NoneDomino)

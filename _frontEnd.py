@@ -94,7 +94,7 @@ def choose_pl1(event, game, cnv, choosen, dom_pl1, width, height):
 def place_pl1(event, game, cnv, dom, place_id, choosen, width, height, g_rep):
     x, y = event.x, event.y
     if place_id != None : cnv.delete(place_id)
-    if choosen :
+    if choosen != -1 :
         if len(game.played) == 0 : 
             xc, yc = width/2, height/2
             if dom.val0 == dom.val1 :
@@ -128,7 +128,7 @@ def place_pl1(event, game, cnv, dom, place_id, choosen, width, height, g_rep):
                         if min(x1,x2) <= x <= max(x1,x2) and min(y1,y2) <= y <= max(y1,y2):
                             return cnv.create_rectangleRound(x1, y1, x2, y2, 2, outline='#ff2b2b', fill=''), (x1, y1, x2, y2), 1, 'B'
                 if dom.val0 == doml.val0 :
-                    if dposL[orientl+'B' != None] :
+                    if dposL[orientl+'B'] != None :
                         (x10, y10, x20, y20) = dposL[orientl+'B']
                         x1, y1, x2, y2 = x10+xl, y10+yl, x20+xl, y20+yl
                         if min(x1,x2) <= x <= max(x1,x2) and min(y1,y2) <= y <= max(y1,y2):
@@ -167,11 +167,11 @@ def play_Dom(dom, pos, orient, game, cnv, g_rep, height, width):
             'UR':(23, 23), 'UL':(-46, 23), 'UU':(0, 46), 'UD':None, 'UB':(-11.5, 46),
             'DR':(23, 0), 'DL':(-46, 0), 'DU':None, 'DD':(0, -46), 'DB':(-11.5, -23),
             'BR':(23, 11.5), 'BL':(-46, 11.5), 'BU':(11.5, 23), 'BD':(11.5, -46), 'BB':None}
-    
-    dposL = {'RR':(46, 0), 'RL':None , 'RU':(0, 23), 'RD':(0, -46), 'RB':(-23, -11.5),
-            'LR':None, 'LL':(46, 0) , 'LU':(23, 23), 'LD':(0, -46), 'LB':(46, -11.5),
-            'UR':(23, 0), 'UL':(-46, 0), 'UU':(0, -46), 'UD':None, 'UB':(-11.5, -23),
-            'DR':(23, 23), 'DL':(-46, 23), 'DU':None, 'DD':(0, 46), 'DB':(-11.5, 46),
+
+    dposL = {'RR':(-46, 0), 'RL':None , 'RU':(0, -46), 'RD':(0, 23), 'RB':(-23, -11.5),
+            'LR':None, 'LL':(46, 0) , 'LU':(23, -46), 'LD':(23, 23), 'LB':(46, -11.5),
+            'UR':(-46, 0), 'UL':(23, 0), 'UU':(0, -46), 'UD':None, 'UB':(-11.5, 23),
+            'DR':(-46, 23), 'DL':(23, 23), 'DU':None, 'DD':(0, 46), 'DB':(-11.5, 46),
             'BR':(23, 11.5), 'BL':(-46, 11.5), 'BU':(11.5, 23), 'BD':(11.5, -46), 'BB':None}
 
     if pos : (dx, dy) = dposL[orient0+orient]
@@ -200,6 +200,7 @@ def round(cnv, Nr, sc1, sc2):
     width, height = float(cnv['width']), float(cnv['height'])
     Nlayer = 2
 
+    global game, g_rep
     game = _backEnd.Game()
     g_rep = [(), ()]
     if Nr == 1 :
@@ -247,7 +248,8 @@ def round(cnv, Nr, sc1, sc2):
     def select_pl1_0(event):
         global choosen, dom_choose, id_sel, coord_sel, pos_sel, ort_sel
         if choosen != -1 :
-            id_sel, coord_sel, pos_sel, ort_sel = place_pl1(event, game, cnv, dom_choose, id_sel, choosen, width, height, g_rep)
+            u = place_pl1(event, game, cnv, dom_choose, id_sel, choosen, width, height, g_rep)
+            if u != None : id_sel, coord_sel, pos_sel, ort_sel = u
 
     cnv.bind('<Button-1>', choose_pl1_0)
     cnv.bind('<Motion>', select_pl1_0)
