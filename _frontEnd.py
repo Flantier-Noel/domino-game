@@ -237,7 +237,12 @@ def round(cnv, Nr, sc1, sc2):
             _, _, orient0, _ = g_rep[pos] ## D should be modified ...
             play_Dom(dom, pos, orient0, game, cnv, g_rep, height, width)
 
-        choosen, dom_pl1, dom_choose = choose_pl1(event, game, cnv, choosen, dom_pl1, width, height)
+        if len(game.played) > 0 :
+            for dom in game.player1 :
+                if dom.val0 == g_rep[0][-1] or dom.val1 == g_rep[0][-1] or dom.val0 == g_rep[1][-1] or dom.val1 == g_rep[1][-1] :
+                    choosen, dom_pl1, dom_choose = choose_pl1(event, game, cnv, choosen, dom_pl1, width, height)
+                    break
+        else : choosen, dom_pl1, dom_choose = choose_pl1(event, game, cnv, choosen, dom_pl1, width, height)
 
     display_pl2_0()
     display_pl1_0()
