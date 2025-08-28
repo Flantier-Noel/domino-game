@@ -38,7 +38,7 @@ def create_domino(cnv, x1, y1, dom, visible=True, orient='vertical', switch=Fals
         if orient == 'horizontal' :
             for (dx, dy) in dots[v1]: ids.append( cnv.create_oval(x1+dx+23, y1+dy, x1+dx+5+23, y1+dy+5, fill='#29272e') ) 
             
-        return ids
+    return ids
 tkinter.Canvas.create_domino = create_domino
 
 def display_pl1(game, cnv, dom_pl1, width, height):
@@ -55,7 +55,8 @@ def display_pl1(game, cnv, dom_pl1, width, height):
 
 def display_pl2(game, cnv, dom_pl2, width):
     N = len(game.player2)
-    for cnv_id in dom_pl2 : cnv.delete(cnv_id)
+    for cnv_id_lst in dom_pl2 :
+        for cnv_id in cnv_id_lst : cnv.delete(cnv_id)
     dom_pl2 = []
     if N%2 == 0 :
         for i in range(-N//2, N//2) : dom_pl2.append( cnv.create_domino(width/2 + i*30, -10, None, visible=False) )
@@ -143,7 +144,7 @@ def place_pl1(event, game, cnv, dom, place_id, choosen, width, height, g_rep):
                             return cnv.create_rectangleRound(x1, y1, x2, y2, 2, outline='#ff2b2b', fill=''), (x1, y1, x2, y2), 1, or2
                 if dom.val0 == doml.val0 or dom.val1 == doml.val0 :
                     if dposL[orientl+or2] != None :
-                        (x10, y10, x20, y20) = dposL[orientr+or2]
+                        (x10, y10, x20, y20) = dposL[orientl+or2]
                         x1, y1, x2, y2 = x10+xl, y10+yl, x20+xl, y20+yl
                         if min(x1,x2) <= x <= max(x1,x2) and min(y1,y2) <= y <= max(y1,y2):
                             return cnv.create_rectangleRound(x1, y1, x2, y2, 2, outline='#ff2b2b', fill=''), (x1, y1, x2, y2), 0, or2
@@ -183,6 +184,7 @@ def play_Dom(dom, pos, orient, game, cnv, g_rep, height, width):
         if orient0 in ['R', 'L'] : orient_abs = 'vertical'
         if orient0 in ['U', 'D'] : orient_abs = 'horizontal'
     
+    switch = False
     if pos :
         if dom.val0 == dom0.val1 : switch = False
         if dom.val1 == dom0.val1 : switch = True
@@ -236,10 +238,11 @@ def round(cnv, Nr, sc1, sc2):
             dom, pos = mvs[0][0]
             _, _, orient0, _ = g_rep[pos] ## D should be modified ...
             play_Dom(dom, pos, orient0, game, cnv, g_rep, height, width)
+            display_pl2_0()
 
         if len(game.played) > 0 :
             for dom in game.player1 :
-                if dom.val0 == g_rep[0][-1] or dom.val1 == g_rep[0][-1] or dom.val0 == g_rep[1][-1] or dom.val1 == g_rep[1][-1] :
+                if dom.val0 == g_rep[0][-1].val0 or dom.val1 == g_rep[0][-1].val0 or dom.val0 == g_rep[1][-1].val1 or dom.val1 == g_rep[0][-1].val1 :
                     choosen, dom_pl1, dom_choose = choose_pl1(event, game, cnv, choosen, dom_pl1, width, height)
                     break
         else : choosen, dom_pl1, dom_choose = choose_pl1(event, game, cnv, choosen, dom_pl1, width, height)
