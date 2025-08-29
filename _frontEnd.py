@@ -114,13 +114,13 @@ def place_pl1(event, game, cnv, dom, place_id, choosen, width, height, g_rep):
                     'UR':(23, 23, 69, 46), 'UL':(0, 23, -46, 46), 'UU':(0, 46, 23, 92), 'UD':None, 'UB':(-11.5, 46, 34.5, 69),
                     'DR':(23, 0, 69, 23), 'DL':(0, 0, -46, 23), 'DU':None, 'DD':(0,0, 23, -46), 'DB':(-11.5, 0, 34.5, -23),
                     'BR':(23, 11.5, 69, 34.5), 'BL':(0, 11.5, -46, 34.5), 'BU':(11.5, 23, 34.5, 69), 'BD':(11.5, 0, 34.5, -46), 'BB':None}
-
-            dposL = {'RR':(0, 0, -46, 23), 'RL':None , 'RU':(0, 23, 23, 69), 'RD':(0, 0, 23, -46), 'RB':(-23, -11.5, 0, 34.5),
-                    'LR':None, 'LL':(46, 0, 92, 23) , 'LU':(23, 23, 46, 69), 'LD':(23, 0, 46, -46), 'LB':(46, -11.5, 69, 34.5),
-                    'UR':(23, 0, 69, 23), 'UL':(0, 0, -46, 23), 'UU':(0,0, 23, -46), 'UD':None, 'UB':(-11.5, 0, 34.5, -23),
-                    'DR':(23, 23, 69, 46), 'DL':(0, 23, -46, 46), 'DU':None, 'DD':(0, 46, 23, 92), 'DB':(-11.5, 46, 34.5, 69),
+  
+            dposL = {'RR':(0, 0, -46, 23), 'RL':None , 'RU':(0, 0, 23, -46), 'RD':(0, 23, 23, 69), 'RB':(-23, -11.5, 0, 34.5),
+                    'LR':None, 'LL':(46, 0, 92, 23) , 'LU':(23, 0, 46, -46), 'LD':(23, 23, 46, 69), 'LB':(46, -11.5, 69, 34.5),
+                    'UR':(0, 0, -46, 23), 'UL':(23, 0, 69, 23), 'UU':(0,0, 23, -46), 'UD':None, 'UB':(-11.5, 0, 34.5, -23),
+                    'DR':(0, 23, -46, 46), 'DL':(23, 23, 69, 46), 'DU':None, 'DD':(0, 46, 23, 92), 'DB':(-11.5, 46, 34.5, 69),
                     'BR':(23, 11.5, 69, 34.5), 'BL':(0, 11.5, -46, 34.5), 'BU':(11.5, 23, 34.5, 69), 'BD':(11.5, 0, 34.5, -46), 'BB':None}
-
+            
             if dom.val0 == dom.val1 :
                 if dom.val1 == domr.val1 :
                     if dposR[orientr+'B'] != None :
@@ -135,19 +135,20 @@ def place_pl1(event, game, cnv, dom, place_id, choosen, width, height, g_rep):
                         if min(x1,x2) <= x <= max(x1,x2) and min(y1,y2) <= y <= max(y1,y2):
                             return cnv.create_rectangleRound(x1, y1, x2, y2, 2, outline='#ff2b2b', fill=''), (x1, y1, x2, y2), 0, 'B'
 
-            for or2 in ['R', 'L', 'U', 'D']:
-                if dom.val0 == domr.val1 or dom.val1 == domr.val1 :
-                    if dposR[orientr+or2] != None :
-                        (x10, y10, x20, y20) = dposR[orientr+or2]
-                        x1, y1, x2, y2 = x10+xr, y10+yr, x20+xr, y20+yr
-                        if min(x1,x2) <= x <= max(x1,x2) and min(y1,y2) <= y <= max(y1,y2):
-                            return cnv.create_rectangleRound(x1, y1, x2, y2, 2, outline='#ff2b2b', fill=''), (x1, y1, x2, y2), 1, or2
-                if dom.val0 == doml.val0 or dom.val1 == doml.val0 :
-                    if dposL[orientl+or2] != None :
-                        (x10, y10, x20, y20) = dposL[orientl+or2]
-                        x1, y1, x2, y2 = x10+xl, y10+yl, x20+xl, y20+yl
-                        if min(x1,x2) <= x <= max(x1,x2) and min(y1,y2) <= y <= max(y1,y2):
-                            return cnv.create_rectangleRound(x1, y1, x2, y2, 2, outline='#ff2b2b', fill=''), (x1, y1, x2, y2), 0, or2
+            else :
+                for or2 in ['R', 'L', 'U', 'D']:
+                    if dom.val0 == domr.val1 or dom.val1 == domr.val1 :
+                        if dposR[orientr+or2] != None :
+                            (x10, y10, x20, y20) = dposR[orientr+or2]
+                            x1, y1, x2, y2 = x10+xr, y10+yr, x20+xr, y20+yr
+                            if min(x1,x2) <= x <= max(x1,x2) and min(y1,y2) <= y <= max(y1,y2):
+                                return cnv.create_rectangleRound(x1, y1, x2, y2, 2, outline='#ff2b2b', fill=''), (x1, y1, x2, y2), 1, or2
+                    if dom.val0 == doml.val0 or dom.val1 == doml.val0 :
+                        if dposL[orientl+or2] != None :
+                            (x10, y10, x20, y20) = dposL[orientl+or2]
+                            x1, y1, x2, y2 = x10+xl, y10+yl, x20+xl, y20+yl
+                            if min(x1,x2) <= x <= max(x1,x2) and min(y1,y2) <= y <= max(y1,y2):
+                                return cnv.create_rectangleRound(x1, y1, x2, y2, 2, outline='#ff2b2b', fill=''), (x1, y1, x2, y2), 0, or2
 
 def play_Dom(dom, pos, orient, game, cnv, g_rep, height, width):
     if len(game.played) == 0 :
@@ -236,7 +237,8 @@ def round(cnv, Nr, sc1, sc2):
         if game.current_play == 1 :
             mvs = game.best_moves(Nlayer)
             dom, pos = mvs[0][0]
-            _, _, orient0, _ = g_rep[pos] ## D should be modified ...
+            orient0 = 'R'
+            if dom.val0 == dom.val1 : orient0 = 'B'
             play_Dom(dom, pos, orient0, game, cnv, g_rep, height, width)
             display_pl2_0()
 
