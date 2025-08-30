@@ -137,7 +137,6 @@ class Game():
         def sort_fun(lst):
             game_copy = self.copy()
             for mv in lst : game_copy.play(*mv)
-            return game_copy.rate()
-    
+            return game_copy.rate() 
         moves.sort(key = sort_fun)
         return moves[::-1]
