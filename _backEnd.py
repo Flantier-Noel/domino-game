@@ -73,7 +73,9 @@ class Game():
                 if Domino(i, j) in self.player2 : return 1, (i,j)
 
     def play(self, dom, relat_pos):
-        if isinstance(dom, Domino.NoneDomino) : return True
+        if isinstance(dom, Domino.NoneDomino) : 
+            self.current_play = (self.current_play + 1)%2
+            return True
         player = [self.player1, self.player2][self.current_play]
         if dom in player :
             ind = player.index(dom)

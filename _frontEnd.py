@@ -255,7 +255,10 @@ def round(cnv, Nr, sc1, sc2):
         else :
             mvs = game.best_moves(Nlayer)
             dom, pos = mvs[0][0]
-            if dom == _backEnd.Domino.NoneDomino() : assert False, 'End Game'
+            if dom == _backEnd.Domino.NoneDomino() :
+                for ids in cnv.find_all() : cnv.delete(ids)
+                rad = 10
+                cnv.create_rectangleRound(rad, rad, width-rad*0.7, height-rad*0.7, rad, fill='#076e01')
             game.current_play = 1
             orient0 = 'R'
             if dom.val0 == dom.val1 : orient0 = 'B'
