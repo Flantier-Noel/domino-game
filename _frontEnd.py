@@ -259,6 +259,11 @@ def round(cnv, Nr, sc1, sc2):
                 for ids in cnv.find_all() : cnv.delete(ids)
                 rad = 10
                 cnv.create_rectangleRound(rad, rad, width-rad*0.7, height-rad*0.7, rad, fill='#076e01')
+                val_play1 = sum([int(dom) for dom in game.player1])
+                val_play2 = sum([int(dom) for dom in game.player2])
+                if val_play1 < val_play2 : sc1 += 1
+                if val_play1 > val_play2 : sc2 += 1
+                round(cnv, Nr+1, sc1, sc2)
             else :
                 game.current_play = 1
                 orient0 = 'R'
