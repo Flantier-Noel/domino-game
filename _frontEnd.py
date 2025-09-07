@@ -262,11 +262,6 @@ def round(cnv, Nr, sc1, sc2):
                 if val_play1 > val_play2 : sc2 += 1
                 round(cnv, Nr+1, sc1, sc2)
             else :
-                val_play1 = sum([int(dom) for dom in game.player1])
-                val_play2 = sum([int(dom) for dom in game.player2])
-                if val_play1 < val_play2 : sc1 += 1
-                if val_play1 > val_play2 : sc2 += 1
-                round(cnv, Nr+1, sc1, sc2)
                 game.current_play = 1
                 orient0 = 'R'
                 if dom.val0 == dom.val1 : orient0 = 'B'
